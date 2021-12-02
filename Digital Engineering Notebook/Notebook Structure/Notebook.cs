@@ -57,8 +57,6 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
         void CreateContacts (XElement element)
         {
             contacts = new List<Contact>();
-            if (element.Element("Contacts") == null)
-                return;
             if (element.Element("Contacts").Descendants() == null)
                 return;
             foreach (XElement x in element.Element("Contacts").Descendants())

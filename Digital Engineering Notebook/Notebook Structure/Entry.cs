@@ -74,6 +74,9 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
 
         public override List<View> ToXAML()
         {
+            if(working)
+                EndDT();
+
             List<View> elements = new List<View>();
             elements.Add(new Label
             {

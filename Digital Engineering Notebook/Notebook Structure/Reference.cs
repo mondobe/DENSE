@@ -53,11 +53,12 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
         public override List<View> ToXAML()
         {
             List<View> elements = new List<View>();
-            elements.Add(new Label
-            {
-                Text = references["Title_of_Work"],
-                FontSize = 24
-            });
+            if(references.ContainsKey("Title_of_Work"))
+                elements.Add(new Label
+                {
+                    Text = references["Title_of_Work"],
+                    FontSize = 24
+                });
             foreach (KeyValuePair<string, string> kvp in references)
                 if (!string.IsNullOrEmpty(kvp.Value) && kvp.Key != "Title_of_Work")
                     elements.Add(new Label
