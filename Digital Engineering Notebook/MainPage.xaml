@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Digital_Engineering_Notebook.MainPage">
+
+    <StackLayout>
+        <Frame BackgroundColor="White" Padding="24" CornerRadius="0">
+            <Label Text="Digital Engineering Notebook - Standard Edition" HorizontalTextAlignment="Start" TextColor="Black" FontSize="Medium"/>
+        </Frame>
+        <Label Text="Welcome to DENSE" FontSize="Header" Padding="30,10,30,10"/>
+        <Label Text="" FontSize="Medium"  Padding="30,0,30,0"/>
+        <Button Text="Create new notebook" Clicked="NewNotebook" VerticalOptions="Start" HorizontalOptions="StartAndExpand" Margin="30,10,30,10"/>
+    </StackLayout>
+
+</ContentPage>

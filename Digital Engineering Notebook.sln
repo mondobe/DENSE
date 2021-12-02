@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digital Engineering Notebook.Android", "Digital Engineering Notebook.Android\Digital Engineering Notebook.Android.csproj", "{2B73BAFD-8B0B-41E0-AEEB-214E41771DBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digital Engineering Notebook", "Digital Engineering Notebook\Digital Engineering Notebook.csproj", "{A2958218-492D-4D7F-9FCF-018D73866D0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B73BAFD-8B0B-41E0-AEEB-214E41771DBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B73BAFD-8B0B-41E0-AEEB-214E41771DBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B73BAFD-8B0B-41E0-AEEB-214E41771DBA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2B73BAFD-8B0B-41E0-AEEB-214E41771DBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B73BAFD-8B0B-41E0-AEEB-214E41771DBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B73BAFD-8B0B-41E0-AEEB-214E41771DBA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A2958218-492D-4D7F-9FCF-018D73866D0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2958218-492D-4D7F-9FCF-018D73866D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2958218-492D-4D7F-9FCF-018D73866D0E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A2958218-492D-4D7F-9FCF-018D73866D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2958218-492D-4D7F-9FCF-018D73866D0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2958218-492D-4D7F-9FCF-018D73866D0E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FBD887E4-AEBA-4609-A090-1F423360A62A}
+	EndGlobalSection
+EndGlobal
