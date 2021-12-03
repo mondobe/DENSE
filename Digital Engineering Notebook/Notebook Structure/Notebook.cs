@@ -57,9 +57,9 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
         void CreateContacts (XElement element)
         {
             contacts = new List<Contact>();
-            if (element.Element("Contacts").Descendants() == null)
+            if (element.Element("Contacts").Elements() == null)
                 return;
-            foreach (XElement x in element.Element("Contacts").Descendants())
+            foreach (XElement x in element.Element("Contacts").Elements())
                 contacts.Add(new Contact(x));
         }
 
@@ -68,16 +68,16 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
             references = new List<Reference>();
             if (!element.Element("References").HasElements)
                 return;
-            foreach (XElement x in element.Element("References").Descendants())
+            foreach (XElement x in element.Element("References").Elements())
                 references.Add(new Reference(x));
         }
 
         void CreateEntries(XElement element)
         {
             entries = new List<Entry>();
-            if (element.Element("Entries").Descendants() == null)
+            if (element.Element("Entries").Elements() == null)
                 return;
-            foreach (XElement x in element.Element("Entries").Descendants())
+            foreach (XElement x in element.Element("Entries").Elements())
                 entries.Add(new Entry(x));
         }
 
@@ -113,6 +113,10 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
         {
             XElement anchor = ConvertToXML();
             FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+            long oldLen = stream.Length;
+            stream.SetLength(0);
+            stream.Flush();
+            stream.SetLength(oldLen);
             await Task.Run(() => anchor.Save(stream));
             stream.Close();
         }
@@ -122,7 +126,7 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
             if (!File.Exists(path))
                 throw new FileNotFoundException("The notebook XML file does not exist");
             string fileRead = await Task.Run(() => File.ReadAllText(path));
-            string cleanFileRead = fileRead;
+            string cleanFileRead = fileRead.Trim();
             if(cleanFileRead.EndsWith(">>"))
                 cleanFileRead = fileRead.Remove(fileRead.Length - 1);
             Console.WriteLine(cleanFileRead);

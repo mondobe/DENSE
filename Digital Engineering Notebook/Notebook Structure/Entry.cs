@@ -16,18 +16,22 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
         {
             entries = new Dictionary<DateTime, object>();
 
-            if (element.Descendants() != null)
-            {
-                List<XElement> elements = element.Descendants() as List<XElement>;
+            List<XElement> elements = element.Elements() as List<XElement>;
+            
+            Console.WriteLine("New Entry: " + element);
 
+            if (elements != null)
+            {
                 foreach (XElement x in elements)
                 {
+                    Console.WriteLine(x);
                     if (x.Name == "DateTimes")
                     {
                         startDT = DateTime.Parse(x.Element("Start").Value);
                         endDT = DateTime.Parse(x.Element("End").Value);
                     }
-                    entries.Add(new DateTime(long.Parse(x.Element("Time").Value)), x.Value);
+                    else
+                        entries.Add(new DateTime(long.Parse(x.Element("Time").Value)), x.Value);
                 }
             }
             else
