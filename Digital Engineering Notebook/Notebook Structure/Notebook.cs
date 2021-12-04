@@ -126,7 +126,7 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
             if (!File.Exists(path))
                 throw new FileNotFoundException("The notebook XML file does not exist");
             string fileRead = await Task.Run(() => File.ReadAllText(path));
-            string cleanFileRead = fileRead.Trim();
+            string cleanFileRead = fileRead.MakeXMLAcceptable();
             if(cleanFileRead.EndsWith(">>"))
                 cleanFileRead = fileRead.Remove(fileRead.Length - 1);
             Console.WriteLine(cleanFileRead);

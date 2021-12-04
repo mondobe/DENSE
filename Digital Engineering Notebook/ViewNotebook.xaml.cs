@@ -15,6 +15,11 @@ namespace Digital_Engineering_Notebook
         public ViewNotebook()
         {
             InitializeComponent();
+            RefreshNotebook();
+        }
+
+        public void RefreshNotebook()
+        {
             topLabel.Text = ActiveNotebook.activeNotebook.name;
 
             foreach (View e in ActiveNotebook.activeNotebook.ToXAML())

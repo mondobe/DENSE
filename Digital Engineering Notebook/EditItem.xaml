@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Digital_Engineering_Notebook.EditItem">
     <ScrollView>
-        <StackLayout x:Name="layout">
-            <Entry VerticalOptions="EndAndExpand"/>
+        <StackLayout>
+            <StackLayout x:Name="layout">
+            </StackLayout>
+            <Entry x:Name="textEntry" VerticalOptions="EndAndExpand" Completed="Entry_Completed"/>
         </StackLayout>
     </ScrollView>
 </ContentPage>

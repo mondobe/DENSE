@@ -10,18 +10,15 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
     {
         public Dictionary<DateTime, object> entries;
         public DateTime startDT, endDT;
-        public bool working = false;
 
         public Entry(XElement element) : base(element)
         {
             entries = new Dictionary<DateTime, object>();
 
-            List<XElement> elements = element.Elements() as List<XElement>;
-            
-            Console.WriteLine("New Entry: " + element);
-
-            if (elements != null)
+            if (element.HasElements)
             {
+                IEnumerable<XElement> elements = element.Elements();
+
                 foreach (XElement x in elements)
                 {
                     Console.WriteLine(x);
@@ -31,7 +28,7 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
                         endDT = DateTime.Parse(x.Element("End").Value);
                     }
                     else
-                        entries.Add(new DateTime(long.Parse(x.Element("Time").Value)), x.Value);
+                        entries.Add(DateTime.Parse(x.Element("Time").Value), x.Element("Data").Value);
                 }
             }
             else
@@ -43,14 +40,12 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
 
         public void InitDT()
         {
-            working = true;
             startDT = DateTime.Now;
             endDT = new DateTime();
         }
 
         public void EndDT()
         {
-            working = false;
             endDT = DateTime.Now;
         }
 
@@ -61,13 +56,12 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
 
         public override XElement ConvertToXML()
         {
-            if (working)
-                throw new InvalidOperationException("Cannot save while still working on an entry!");
             XElement anchor = new XElement(name);
 
             foreach (KeyValuePair<DateTime, object> kvp in entries)
-                anchor.Add(new XElement("Entry", kvp.Value, 
-                    new XElement("Time", kvp.Key.Ticks.ToString())));
+                anchor.Add(new XElement("Entry",
+                    new XElement("Data", kvp.Value), 
+                    new XElement("Time", kvp.Key)));
 
             anchor.Add(new XElement("DateTimes",
                 new XElement("Start", startDT),
@@ -78,7 +72,7 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
 
         public override List<View> ToXAML()
         {
-            if(working)
+            if(endDT == null)
                 EndDT();
 
             List<View> elements = new List<View>();

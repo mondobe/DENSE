@@ -10,6 +10,7 @@
         <Label Text="Welcome to DENSE" FontSize="Header" Padding="30,10,30,10"/>
         <Label Text="" FontSize="Medium"  Padding="30,0,30,0"/>
         <Button Text="Create new notebook" Clicked="NewNotebook" VerticalOptions="Start" HorizontalOptions="StartAndExpand" Margin="30,10,30,10"/>
+        <Button Text="Load notebook" Clicked="LoadNotebook" VerticalOptions="Start" HorizontalOptions="StartAndExpand" Margin="30,10,30,10"/>
     </StackLayout>
 
 </ContentPage>

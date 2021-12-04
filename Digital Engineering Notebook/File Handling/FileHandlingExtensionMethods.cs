@@ -20,5 +20,14 @@ namespace Digital_Engineering_Notebook.File_Handling
                 (element.Descendants() as List<XElement>).ForEach(x => toRet += "/n" + x.XElementToNameString());
             return toRet;
         }
+
+        public static string MakeXMLAcceptable(this string start)
+        {
+            string end = "";
+            foreach (char c in start)
+                if (c != '\0')
+                    end += c;
+            return end;
+        }
     }
 }

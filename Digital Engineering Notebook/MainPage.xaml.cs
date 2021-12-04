@@ -14,6 +14,25 @@ namespace Digital_Engineering_Notebook
         {
             InitializeComponent();
         }
+        private async void LoadNotebook(object sender, System.EventArgs e)
+        {
+            Button send = sender as Button;
+            send.Text = "Loading...";
+            Notebook mostRecent = null;
+
+            if (File.Exists("notebook.xml".ToGlobalPath()))
+            {
+                mostRecent = await LoadNB("notebook.xml");
+                Console.WriteLine("Successfully loaded notebook!");
+            }
+            else
+                NewNotebook(sender, e);
+
+            ActiveNotebook.activeNotebook = mostRecent;
+            mostRecent.SaveXMLFile("notebook.xml".ToGlobalPath());
+            Console.WriteLine("Saved notebook!");
+            await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
+        }
 
         private async void NewNotebook(object sender, System.EventArgs e)
         {
@@ -21,34 +40,8 @@ namespace Digital_Engineering_Notebook
             send.Text = "Creating...";
             Notebook mostRecent = null;
 
-            if(File.Exists("notebook.xml".ToGlobalPath()))
-            {
-                mostRecent = await LoadNB("notebook.xml");
-                Console.WriteLine("Successfully loaded notebook!");
-            }
-
-            if (mostRecent == null)
-            {
-                mostRecent = await Task.Run(() => CreateNB("notebook"));
-                Console.WriteLine("Created new notebook!");
-            }
-
-            Console.WriteLine("Adding contact...");
-            Contact c = mostRecent.AddContact();
-            c.AddField("Name", "John Smith");
-            c.AddField("Occupation", "Engineer");
-
-            Console.WriteLine("Adding reference...");
-            Reference r = mostRecent.AddReference();
-            r.AddField("Title_of_Work", "The Engineer's Manual");
-            r.AddField("Work_Type", "Manual");
-            r.AddField("Author", "Allen Brown");
-
-            Console.WriteLine("Adding entry...");
-            Notebook_Structure.Entry en = mostRecent.AddEntry();
-            en.AddLine("Wrote the problem statement.");
-            en.AddLine("Revised the problem statement to make it more concise.");
-            Console.WriteLine("Added entry.");
+            mostRecent = await Task.Run(() => CreateNB("notebook"));
+            Console.WriteLine("Created new notebook!");
 
             ActiveNotebook.activeNotebook = mostRecent;
             mostRecent.SaveXMLFile("notebook.xml".ToGlobalPath());
