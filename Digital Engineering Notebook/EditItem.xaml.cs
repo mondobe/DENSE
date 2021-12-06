@@ -68,6 +68,7 @@ namespace Digital_Engineering_Notebook
                     });
                 }
                 eIndex++;
+                textEntry.Placeholder = c.defaultValues[eIndex];
                 if (eIndex == c.defaultValues.Count)
                 {
                     await Navigation.PopToRootAsync();
@@ -90,6 +91,9 @@ namespace Digital_Engineering_Notebook
                     });
                 }
                 eIndex++;
+
+                textEntry.Placeholder = r.defaultValues[eIndex];
+
                 if (eIndex == r.defaultValues.Count)
                 {
                     await Navigation.PopToRootAsync();
