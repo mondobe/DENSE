@@ -10,7 +10,7 @@ namespace Digital_Engineering_Notebook.File_Handling
     {
         public static string ToGlobalPath(this string localPath)
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), localPath);
+            return Path.Combine(ActiveNotebook.activePath, localPath);
         }
 
         public static string XElementToNameString(this XElement element)

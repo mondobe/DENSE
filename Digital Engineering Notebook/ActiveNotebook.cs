@@ -9,5 +9,14 @@ namespace Digital_Engineering_Notebook
     {
         public static Notebook activeNotebook = null;
         public static ConvertibleItem activeItem = null;
+        public static string basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        public static string dynamicPath = "";
+        public static string activePath
+        {
+           get
+           {
+               return Path.Combine(basePath, dynamicPath);
+           }
+        }
     }
 }

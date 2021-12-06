@@ -19,6 +19,8 @@ namespace Digital_Engineering_Notebook
             Button send = sender as Button;
             send.Text = "Loading...";
             Notebook mostRecent = null;
+            
+            ActiveNotebook.dynamicPath = createName.Text.Trim().ToLower();
 
             if (File.Exists("notebook.xml".ToGlobalPath()))
             {
@@ -39,6 +41,8 @@ namespace Digital_Engineering_Notebook
             Button send = sender as Button;
             send.Text = "Creating...";
             Notebook mostRecent = null;
+
+            ActiveNotebook.dynamicPath = createName.Text.Trim().ToLower();
 
             mostRecent = await Task.Run(() => CreateNB("notebook"));
             Console.WriteLine("Created new notebook!");

@@ -9,6 +9,7 @@
         </Frame>
         <Label Text="Welcome to DENSE" FontSize="Header" Padding="30,10,30,10"/>
         <Label Text="" FontSize="Medium"  Padding="30,0,30,0"/>
+        <Entry x:Name="createName" Text="" Placeholder="Notebook name" HorizontalOptions="Start"/>
         <Button Text="Create new notebook" Clicked="NewNotebook" VerticalOptions="Start" HorizontalOptions="StartAndExpand" Margin="30,10,30,10"/>
         <Button Text="Load notebook" Clicked="LoadNotebook" VerticalOptions="Start" HorizontalOptions="StartAndExpand" Margin="30,10,30,10"/>
     </StackLayout>
