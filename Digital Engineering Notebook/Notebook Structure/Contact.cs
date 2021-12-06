@@ -17,11 +17,8 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
             contacts = new Dictionary<string, string>();
 
             foreach(string s in defaultValues)
-                try
-                {
+                if(element.HasElement(s))
                     contacts.Add(s, element.Element(s).Value);
-                }
-                catch { }
         }
 
         public void AddField(string key, string value)
