@@ -56,6 +56,7 @@ namespace Digital_Engineering_Notebook
         async Task<Notebook> CreateNB(string name)
         {
             Notebook NB = new Notebook("Notebook");
+            Directory.CreateDirectory(name.ToGlobalPath());
             await Task.Run(() => NB.SaveXMLFile(name.ToGlobalPath() + ".xml"));
             return NB;
         }
