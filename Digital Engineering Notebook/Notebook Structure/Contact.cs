@@ -17,7 +17,7 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
             contacts = new Dictionary<string, string>();
 
             foreach(string s in defaultValues)
-                if(element.HasElement(s))
+                if(element.Element(s) != null)
                     contacts.Add(s, element.Element(s).Value);
         }
 

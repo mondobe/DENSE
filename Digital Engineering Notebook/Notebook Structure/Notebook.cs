@@ -112,6 +112,8 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
         public async void SaveXMLFile(string path)
         {
             XElement anchor = ConvertToXML();
+            if (!File.Exists(path))
+                Directory.CreateDirectory(ActiveNotebook.activePath);
             FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
             long oldLen = stream.Length;
             stream.SetLength(0);

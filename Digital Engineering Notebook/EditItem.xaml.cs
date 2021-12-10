@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using Digital_Engineering_Notebook.Notebook_Structure;
+using Digital_Engineering_Notebook.File_Handling;
 
 namespace Digital_Engineering_Notebook
 {
@@ -23,6 +24,7 @@ namespace Digital_Engineering_Notebook
 
         protected override bool OnBackButtonPressed()
         {
+            ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath());
             Navigation.PopToRootAsync();
             Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
             return true;
@@ -68,12 +70,14 @@ namespace Digital_Engineering_Notebook
                     });
                 }
                 eIndex++;
-                textEntry.Placeholder = c.defaultValues[eIndex];
                 if (eIndex == c.defaultValues.Count)
                 {
+                    await Task.Run(() => ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath()));
                     await Navigation.PopToRootAsync();
                     await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
+                    return;
                 }
+                textEntry.Placeholder = c.defaultValues[eIndex];
             }
             else if (item is Reference)
             {
@@ -91,14 +95,14 @@ namespace Digital_Engineering_Notebook
                     });
                 }
                 eIndex++;
-
-                textEntry.Placeholder = r.defaultValues[eIndex];
-
                 if (eIndex == r.defaultValues.Count)
                 {
+                    await Task.Run(() => ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath()));
                     await Navigation.PopToRootAsync();
                     await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
+                    return;
                 }
+                textEntry.Placeholder = r.defaultValues[eIndex];
             }
 
             textEntry.Text = "";

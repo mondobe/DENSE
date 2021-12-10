@@ -18,7 +18,7 @@ namespace Digital_Engineering_Notebook
         {
             Button send = sender as Button;
             send.Text = "Loading...";
-            Notebook mostRecent = null;
+            Notebook mostRecent;
             
             ActiveNotebook.dynamicPath = createName.Text.Trim().ToLower();
 
@@ -28,7 +28,10 @@ namespace Digital_Engineering_Notebook
                 Console.WriteLine("Successfully loaded notebook!");
             }
             else
+            {
                 NewNotebook(sender, e);
+                return;
+            }
 
             ActiveNotebook.activeNotebook = mostRecent;
             mostRecent.SaveXMLFile("notebook.xml".ToGlobalPath());
@@ -47,17 +50,21 @@ namespace Digital_Engineering_Notebook
             mostRecent = await Task.Run(() => CreateNB("notebook"));
             Console.WriteLine("Created new notebook!");
 
+            if (File.Exists("notebook.xml".ToGlobalPath()))
+            {
+                LoadNotebook(sender, e);
+                return;
+            }
+
             ActiveNotebook.activeNotebook = mostRecent;
             mostRecent.SaveXMLFile("notebook.xml".ToGlobalPath());
             Console.WriteLine("Saved notebook!");
             await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
         }
 
-        async Task<Notebook> CreateNB(string name)
+        Notebook CreateNB(string name)
         {
             Notebook NB = new Notebook("Notebook");
-            Directory.CreateDirectory(name.ToGlobalPath());
-            await Task.Run(() => NB.SaveXMLFile(name.ToGlobalPath() + ".xml"));
             return NB;
         }
 
