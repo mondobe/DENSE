@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Digital_Engineering_Notebook.File_Handling;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -45,6 +46,17 @@ namespace Digital_Engineering_Notebook
         {
             ActiveNotebook.activeItem = ActiveNotebook.activeNotebook.AddEntry();
             await Navigation.PushModalAsync(new NavigationPage(new EditItem()));
+        }
+
+        private async void Export(object sender, EventArgs e)
+        {
+            ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath());
+
+            await Share.RequestAsync(new ShareFileRequest
+            {
+                Title = ActiveNotebook.activeNotebook.name,
+                File = new ShareFile("notebook.xml".ToGlobalPath())
+            });
         }
     }
 }

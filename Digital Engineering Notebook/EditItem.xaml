@@ -5,6 +5,7 @@
     <ScrollView>
         <StackLayout>
             <StackLayout x:Name="layout">
+                <Button Clicked="StopWorking" Text="Stop Working" VerticalOptions="Start" HorizontalOptions="Start"/>
             </StackLayout>
             <Entry x:Name="textEntry" VerticalOptions="EndAndExpand" Completed="Entry_Completed"/>
         </StackLayout>

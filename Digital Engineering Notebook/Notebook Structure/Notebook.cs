@@ -18,12 +18,14 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
 
         public Notebook(XElement element) : base(element)
         {
+            ActiveNotebook.activeNotebook = this;
             name = element.Name.ToString();
             InitNotebook(element);
         }
 
         public Notebook(string name) : base(name)
         {
+            ActiveNotebook.activeNotebook = this;
             this.name = name;
             contacts = new List<Contact>();
             references = new List<Reference>();
@@ -134,6 +136,25 @@ namespace Digital_Engineering_Notebook.Notebook_Structure
             Console.WriteLine(cleanFileRead);
             XElement anchor = XElement.Parse(cleanFileRead);
             return new Notebook(anchor);
+        }
+
+        public async Task<string> AddFileLocally(string path)
+        {
+            Console.WriteLine(path);
+
+            if (!File.Exists(path))
+                throw new FileNotFoundException("Please add an existing file");
+
+            string localPath = Path.GetFileName(path).ToGlobalPath();
+
+            FileStream outfs = File.OpenRead(path);
+            FileStream infs = File.Create(localPath);
+
+            byte[] data = new byte[outfs.Length];
+            await outfs.ReadAsync(data, 0, (int)outfs.Length);
+            await infs.WriteAsync(data, 0, data.Length);
+
+            return localPath;
         }
 
         public override List<View> ToXAML()

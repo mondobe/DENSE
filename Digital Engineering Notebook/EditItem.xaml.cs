@@ -9,6 +9,9 @@ using Xamarin.Forms.Xaml;
 
 using Digital_Engineering_Notebook.Notebook_Structure;
 using Digital_Engineering_Notebook.File_Handling;
+using Xamarin.Essentials;
+using Contact = Digital_Engineering_Notebook.Notebook_Structure.Contact;
+using Entry = Digital_Engineering_Notebook.Notebook_Structure.Entry;
 
 namespace Digital_Engineering_Notebook
 {
@@ -20,23 +23,144 @@ namespace Digital_Engineering_Notebook
         public EditItem()
         {
             InitializeComponent();
+
+            ConvertibleItem item = ActiveNotebook.activeItem;
+            if(item is Entry)
+            {
+                Picker conP = new Picker
+                {
+                    Title = "Add from Contacts",
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.End
+                };
+                foreach (Contact c in ActiveNotebook.activeNotebook.contacts)
+                    conP.Items.Add(c.contacts[c.contacts.Keys.First()]);
+                conP.SelectedIndexChanged += new EventHandler(IncludeContact);
+                layout.Children.Add(conP);
+
+                Picker refP = new Picker
+                {
+                    Title = "Add from References",
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.End
+                };
+                foreach (Reference r in ActiveNotebook.activeNotebook.references)
+                    refP.Items.Add(r.references[r.references.Keys.First()]);
+                refP.SelectedIndexChanged += new EventHandler(IncludeReference);
+                layout.Children.Add(refP);
+
+                Button fileB = new Button
+                {
+                    Text = "Add File",
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.End
+                };
+                fileB.Clicked += IncludeFileAsync;
+                layout.Children.Add(fileB);
+            }
+        }
+
+        public void IncludeContact(object sender, EventArgs e)
+        {
+            Picker picker = (Picker)sender;
+            if (picker.SelectedIndex == -1)
+                return;
+
+            Entry en = (Entry)ActiveNotebook.activeItem;
+            Contact c = ActiveNotebook.activeNotebook.contacts[picker.SelectedIndex];
+            en.AddLine(c);
+
+            layout.Children.Add(new Label
+            {
+                TextColor = Color.DimGray,
+                Text = DateTime.Now.ToShortTimeString(),
+                HorizontalOptions = LayoutOptions.Center
+            });
+            c.ToXAML().ForEach(x => layout.Children.Add(x));
+            picker.SelectedIndex = -1;
+        }
+
+        public void IncludeReference(object sender, EventArgs e)
+        {
+            Picker picker = (Picker)sender;
+            if (picker.SelectedIndex == -1)
+                return;
+
+            Entry en = (Entry)ActiveNotebook.activeItem;
+            Reference r = ActiveNotebook.activeNotebook.references[picker.SelectedIndex];
+            en.AddLine(r);
+
+            layout.Children.Add(new Label
+            {
+                TextColor = Color.DimGray,
+                Text = DateTime.Now.ToShortTimeString(),
+                HorizontalOptions = LayoutOptions.Center
+            });
+            r.ToXAML().ForEach(x => layout.Children.Add(x));
+            picker.SelectedIndex = -1;
+        }
+
+        public async void IncludeFileAsync(object sender, EventArgs e)
+        {
+            string path = (await FilePicker.PickAsync()).FullPath;
+            Console.WriteLine("Loading file from " + path);
+            string localPath = await ActiveNotebook.activeNotebook.AddFileLocally(path);
+
+            Entry en = (Entry)ActiveNotebook.activeItem;
+            en.AddLine("FILE::" + path);
+
+            layout.Children.Add(new Label
+            {
+                TextColor = Color.DimGray,
+                Text = DateTime.Now.ToShortTimeString(),
+                HorizontalOptions = LayoutOptions.Center
+            });
+            View v = localPath.FileToXAMLButton(OpenFileButtonAsync);
+            layout.Children.Add(v);
+        }
+
+        public async void OpenFileButtonAsync(object sender, EventArgs e)
+        {
+            string openPath;
+            if (sender is ImageButton)
+            {
+                ImageButton ib = (ImageButton)sender;
+                openPath = ((FileImageSource)ib.Source).File;
+            }
+            else
+                openPath = ((Button)sender).Text.ToGlobalPath();
+
+            await Launcher.OpenAsync(new OpenFileRequest
+            {
+                File = new ReadOnlyFile(openPath)
+            });
         }
 
         protected override bool OnBackButtonPressed()
         {
-            ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath());
-            Navigation.PopToRootAsync();
-            Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
+            ExitPage();
             return true;
+        }
+
+        private void StopWorking(object sender, EventArgs e)
+        {
+            ExitPage();
+        }
+
+        private async Task ExitPage()
+        {
+            await Task.Run(() => ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath()));
+            await Navigation.PopToRootAsync();
+            await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
         }
 
         private async void Entry_Completed(object sender, EventArgs e)
         {
             string text = textEntry.Text;
             ConvertibleItem item = ActiveNotebook.activeItem;
-            if(item is Notebook_Structure.Entry)
+            if(item is Entry)
             {
-                Notebook_Structure.Entry en = (Notebook_Structure.Entry)item;
+                Entry en = (Entry)item;
                 en.AddLine(text);
 
                 layout.Children.Add(new Label
@@ -52,7 +176,7 @@ namespace Digital_Engineering_Notebook
                     HorizontalOptions = LayoutOptions.Start
                 });
 
-                en.endDT = System.DateTime.Now;
+                en.endDT = DateTime.Now;
             }
             else if (item is Contact)
             {
@@ -72,9 +196,7 @@ namespace Digital_Engineering_Notebook
                 eIndex++;
                 if (eIndex == c.defaultValues.Count)
                 {
-                    await Task.Run(() => ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath()));
-                    await Navigation.PopToRootAsync();
-                    await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
+                    await ExitPage();
                     return;
                 }
                 textEntry.Placeholder = c.defaultValues[eIndex];
@@ -97,9 +219,7 @@ namespace Digital_Engineering_Notebook
                 eIndex++;
                 if (eIndex == r.defaultValues.Count)
                 {
-                    await Task.Run(() => ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath()));
-                    await Navigation.PopToRootAsync();
-                    await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
+                    await ExitPage();
                     return;
                 }
                 textEntry.Placeholder = r.defaultValues[eIndex];

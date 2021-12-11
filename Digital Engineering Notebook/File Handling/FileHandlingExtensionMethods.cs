@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
+using Xamarin.Forms;
 
 namespace Digital_Engineering_Notebook.File_Handling
 {
@@ -28,6 +29,39 @@ namespace Digital_Engineering_Notebook.File_Handling
                 if (c != '\0')
                     end += c;
             return end;
+        }
+
+        public static View FileToXAMLButton(this string path, EventHandler eh)
+        {
+            if (new List<string>
+            {
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".gif",
+                ".bmp",
+            }.Contains(Path.GetExtension(path).ToLower()))
+            {
+                ImageButton ib = new ImageButton
+                {
+                    Source = ImageSource.FromFile(path),
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Start
+                };
+                ib.Clicked += eh;
+                return ib;
+            }
+            else
+            {
+                Button b = new Button
+                {
+                    Text = Path.GetFileName(path),
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Start
+                };
+                b.Clicked += eh;
+                return b;
+            }
         }
     }
 }

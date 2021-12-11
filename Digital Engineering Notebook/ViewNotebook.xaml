@@ -8,6 +8,7 @@
         </Frame>
         <ScrollView>
             <StackLayout x:Name="layout">
+                <Button Text="Export" Clicked="Export" HorizontalOptions="End" BorderWidth="3"/>
                 <Button Text="Add Entry" FontSize="Medium" Clicked="AddEntry"/>
                 <Button Text="Add Contact" FontSize="Medium" Clicked="AddContact"/>
                 <Button Text="Add Reference" FontSize="Medium" Clicked="AddReference"/>

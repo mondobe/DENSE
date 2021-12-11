@@ -33,7 +33,6 @@ namespace Digital_Engineering_Notebook
                 return;
             }
 
-            ActiveNotebook.activeNotebook = mostRecent;
             mostRecent.SaveXMLFile("notebook.xml".ToGlobalPath());
             Console.WriteLine("Saved notebook!");
             await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
@@ -56,7 +55,6 @@ namespace Digital_Engineering_Notebook
                 return;
             }
 
-            ActiveNotebook.activeNotebook = mostRecent;
             mostRecent.SaveXMLFile("notebook.xml".ToGlobalPath());
             Console.WriteLine("Saved notebook!");
             await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
