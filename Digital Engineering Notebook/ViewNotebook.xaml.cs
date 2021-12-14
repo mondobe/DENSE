@@ -8,6 +8,7 @@ using System.IO.Compression;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.IO;
 
 namespace Digital_Engineering_Notebook
 {
@@ -52,12 +53,14 @@ namespace Digital_Engineering_Notebook
         private async void Export(object sender, EventArgs e)
         {
             ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath());
-            ZipFile.CreateFromDirectory(ActiveNotebook.activePath, "notebook.zip".ToGlobalPath());
+            string zipPath = Path.Combine(ActiveNotebook.basePath, ActiveNotebook.activeNotebook.name.Trim().ToLower() + ".zip");
+            File.Delete(zipPath);
+            ZipFile.CreateFromDirectory(ActiveNotebook.activePath, zipPath);
 
             await Share.RequestAsync(new ShareFileRequest
             {
                 Title = ActiveNotebook.activeNotebook.name,
-                File = new ShareFile("notebook.zip".ToGlobalPath())
+                File = new ShareFile(zipPath)
             });
         }
     }
