@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Digital_Engineering_Notebook.MainPage">
 
-    <StackLayout>
+    <StackLayout x:Name="sLayout">
         <Frame BackgroundColor="White" Padding="24" CornerRadius="0">
             <Label Text="Digital Engineering Notebook - Standard Edition" HorizontalTextAlignment="Start" TextColor="Black" FontSize="Medium"/>
         </Frame>

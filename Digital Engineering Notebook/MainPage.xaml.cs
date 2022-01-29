@@ -13,6 +13,19 @@ namespace Digital_Engineering_Notebook
         public MainPage()
         {
             InitializeComponent();
+
+            //Debug test
+            string debugTree = new XElement("Root",
+                new XElement("Branch1",
+                    new XElement("Leaf1")),
+                new XElement("Branch2",
+                    new XElement("Leaf1"),
+                    new XElement("Leaf2"))).XElementToNameString();
+
+            Label l = new Label();
+            l.Text = debugTree;
+
+            sLayout.Children.Add(l);
         }
         private async void LoadNotebook(object sender, System.EventArgs e)
         {
@@ -34,7 +47,6 @@ namespace Digital_Engineering_Notebook
             }
 
             mostRecent.SaveXMLFile("notebook.xml".ToGlobalPath());
-            Console.WriteLine("Saved notebook!");
             await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
         }
 
