@@ -18,15 +18,21 @@ namespace Digital_Engineering_Notebook
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EditItem : ContentPage
     {
+        // The number of the field or line currently being edited
         int eIndex = 0;
 
+        /// <summary>
+        /// Initializes the dropdowns for adding Contacts, References, or files to an Entry.
+        /// </summary>
         public EditItem()
         {
             InitializeComponent();
 
+            // Get the active item an determine the type
             ConvertibleItem item = ActiveNotebook.activeItem;
             if(item is Entry)
             {
+                // Add the dropdown to choose a contact
                 Picker conP = new Picker
                 {
                     Title = "Add from Contacts",
@@ -38,6 +44,7 @@ namespace Digital_Engineering_Notebook
                 conP.SelectedIndexChanged += new EventHandler(IncludeContact);
                 layout.Children.Add(conP);
 
+                // Add the dropdown to choose a reference
                 Picker refP = new Picker
                 {
                     Title = "Add from References",
@@ -49,6 +56,7 @@ namespace Digital_Engineering_Notebook
                 refP.SelectedIndexChanged += new EventHandler(IncludeReference);
                 layout.Children.Add(refP);
 
+                // Add the button to choose an external file
                 Button fileB = new Button
                 {
                     Text = "Add File",
@@ -60,16 +68,24 @@ namespace Digital_Engineering_Notebook
             }
         }
 
+        /// <summary>
+        /// Adds the representation of a Contact to the entry.
+        /// </summary>
+        /// <param name="sender">The dropdown used to select the contact</param>
+        /// <param name="e">Unused</param>
         public void IncludeContact(object sender, EventArgs e)
         {
+            // If the picker is reset, don't include anything
             Picker picker = (Picker)sender;
             if (picker.SelectedIndex == -1)
                 return;
 
+            // Add the contact as a line internally
             Entry en = (Entry)ActiveNotebook.activeItem;
             Contact c = ActiveNotebook.activeNotebook.contacts[picker.SelectedIndex];
             en.AddLine(c);
 
+            // Add a visual representation of the contact
             layout.Children.Add(new Label
             {
                 TextColor = Color.DimGray,
@@ -77,19 +93,29 @@ namespace Digital_Engineering_Notebook
                 HorizontalOptions = LayoutOptions.Center
             });
             c.ToXAML().ForEach(x => layout.Children.Add(x));
+
+            // Reset the dropdown
             picker.SelectedIndex = -1;
         }
 
+        /// <summary>
+        /// Adds the representation of a Reference to the entry.
+        /// </summary>
+        /// <param name="sender">The dropdown used to select the reference</param>
+        /// <param name="e">Unused</param>
         public void IncludeReference(object sender, EventArgs e)
         {
+            // If the picker is reset, don't include anything
             Picker picker = (Picker)sender;
             if (picker.SelectedIndex == -1)
                 return;
 
+            // Add the reference as a line internally
             Entry en = (Entry)ActiveNotebook.activeItem;
             Reference r = ActiveNotebook.activeNotebook.references[picker.SelectedIndex];
             en.AddLine(r);
 
+            // Add a visual representation of the reference
             layout.Children.Add(new Label
             {
                 TextColor = Color.DimGray,
@@ -97,18 +123,29 @@ namespace Digital_Engineering_Notebook
                 HorizontalOptions = LayoutOptions.Center
             });
             r.ToXAML().ForEach(x => layout.Children.Add(x));
+
+            // Reset the dropdown
             picker.SelectedIndex = -1;
         }
 
+        /// <summary>
+        /// Adds a file to the notebook and includes it in the entry as a button or ImageButton
+        /// that opens the file.
+        /// </summary>
+        /// <param name="sender">Unused</param>
+        /// <param name="e">Unused</param>
         public async void IncludeFileAsync(object sender, EventArgs e)
         {
+            // Add a copy of the file to the notebook directory (for ease of exporting)
             string path = (await FilePicker.PickAsync()).FullPath;
             Console.WriteLine("Loading file from " + path);
             string localPath = await ActiveNotebook.activeNotebook.AddFileLocally(path);
 
+            // Add the file to the entry as an internal reference
             Entry en = (Entry)ActiveNotebook.activeItem;
             en.AddLine("FILE::" + path);
 
+            // Add a visual representation of the file
             layout.Children.Add(new Label
             {
                 TextColor = Color.DimGray,
@@ -119,23 +156,37 @@ namespace Digital_Engineering_Notebook
             layout.Children.Add(v);
         }
 
+        /// <summary>
+        /// Opens a file presented as a Button or ImageButton.
+        /// </summary>
+        /// <param name="sender">The button clicked containing a file</param>
+        /// <param name="e">Unused</param>
         public async void OpenFileButtonAsync(object sender, EventArgs e)
         {
             string openPath;
+            // If the button is an ImageButton, treat the file as an image
             if (sender is ImageButton)
             {
                 ImageButton ib = (ImageButton)sender;
                 openPath = ((FileImageSource)ib.Source).File;
             }
             else
+                // Otherwise, use the path on the button
                 openPath = ((Button)sender).Text.ToGlobalPath();
 
+            // Open the file externally
             await Launcher.OpenAsync(new OpenFileRequest
             {
                 File = new ReadOnlyFile(openPath)
             });
         }
 
+        /// <summary>
+        /// When the back button is pressed, go back to the root and open the ViewNotebook page
+        /// instead of popping this page. This will refresh the page. (This can probably be done 
+        /// better)
+        /// </summary>
+        /// <returns>Always true, so the page doesn't automatically close</returns>
         protected override bool OnBackButtonPressed()
         {
             ExitPage();
@@ -147,6 +198,9 @@ namespace Digital_Engineering_Notebook
             ExitPage();
         }
 
+        /// <summary>
+        /// See explanation on OnBackButtonPressed.
+        /// </summary>
         private async Task ExitPage()
         {
             await Task.Run(() => ActiveNotebook.activeNotebook.SaveXMLFile("notebook.xml".ToGlobalPath()));
@@ -154,15 +208,25 @@ namespace Digital_Engineering_Notebook
             await Navigation.PushModalAsync(new NavigationPage(new ViewNotebook()));
         }
 
+        /// <summary>
+        /// When the user finished the current line, add its contents to the current
+        /// Contact, Reference, or Entry being edited, then act accordingly.
+        /// </summary>
+        /// <param name="sender">Unused</param>
+        /// <param name="e">Unused</param>
         private async void Entry_Completed(object sender, EventArgs e)
         {
+            // Get the current text and active item open
             string text = textEntry.Text;
             ConvertibleItem item = ActiveNotebook.activeItem;
+
             if(item is Entry)
             {
+                // Add the text as a line to the Entry
                 Entry en = (Entry)item;
                 en.AddLine(text);
 
+                // Add a timestamp and visual representation of the text
                 layout.Children.Add(new Label
                 {
                     TextColor = Color.DimGray,
@@ -176,16 +240,19 @@ namespace Digital_Engineering_Notebook
                     HorizontalOptions = LayoutOptions.Start
                 });
 
+                // Reset the end timestamp for the Entry
                 en.endDT = DateTime.Now;
             }
             else if (item is Contact)
             {
                 Contact c = (Contact)item;
 
+                // Add the text to the field currently being worked on
                 if (!string.IsNullOrEmpty(text))
                 {
                     c.AddField(c.defaultValues[eIndex], text);
 
+                    // Add a visual representation of the field and the text
                     layout.Children.Add(new Label
                     {
                         Text = c.defaultValues[eIndex] + ": " + text,
@@ -194,6 +261,7 @@ namespace Digital_Engineering_Notebook
                     });
                 }
                 eIndex++;
+                // If the Contact is completely filled out, end the session
                 if (eIndex == c.defaultValues.Count)
                 {
                     await ExitPage();
@@ -205,10 +273,12 @@ namespace Digital_Engineering_Notebook
             {
                 Reference r = (Reference)item;
 
+                // Add the text to the field currently being worked on
                 if (!string.IsNullOrEmpty(text))
                 {
                     r.AddField(r.defaultValues[eIndex], text);
 
+                    // Add a visual representation of the field and the text
                     layout.Children.Add(new Label
                     {
                         Text = r.defaultValues[eIndex] + ": " + text,
@@ -217,6 +287,7 @@ namespace Digital_Engineering_Notebook
                     });
                 }
                 eIndex++;
+                // If the Contact is completely filled out, end the session
                 if (eIndex == r.defaultValues.Count)
                 {
                     await ExitPage();
@@ -225,6 +296,7 @@ namespace Digital_Engineering_Notebook
                 textEntry.Placeholder = r.defaultValues[eIndex];
             }
 
+            // Clear the entered text
             textEntry.Text = "";
         }
     }
