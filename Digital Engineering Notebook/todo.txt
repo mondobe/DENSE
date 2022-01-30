@@ -1,0 +1,21 @@
+﻿Things that need to get done by sometime
+
+Functional:
+ - Controls for the ViewNotebook page
+   - CTRL-F: search for entries (someone else has probably put this on GitHub)
+   - Edit items after they've been created
+   - Duplicate items and edit them
+   - Delete/hide items
+   - See included files, edit their paths, and exclude them from the project folder
+   - Reorder items
+ - Open notebook files from any path
+ - Use a dropdown for choosing notebooks
+
+Internal:
+ - Don't use the XElement "Name" property
+ - Dynamically refresh pages to reflect changes in items
+
+Visual:
+ - Find a better color palette
+ - Automatically adjust with light/dark mode
+ - Show items in more encapsulated boxes
