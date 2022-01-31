@@ -10,6 +10,7 @@ Functional:
    - Reorder items
  - Open notebook files from any path
  - Use a dropdown for choosing notebooks
+ - Export notebook as HTML
 
 Internal:
  - Don't use the XElement "Name" property
@@ -19,3 +20,7 @@ Visual:
  - Find a better color palette
  - Automatically adjust with light/dark mode
  - Show items in more encapsulated boxes
+
+Educational Features:
+ - Add option to disable copy/paste
+ - Create teacher edition (fork, branch, or separate project?)
